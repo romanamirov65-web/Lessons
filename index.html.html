@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive English Practice - New Exercises</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #2ecc71;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 8px;
+        }
+
+        h1 { margin: 0 0 10px 0; }
+        p.subtitle { margin: 0; opacity: 0.8; }
+
+        .student-info {
+            max-width: 800px;
+            margin: 0 auto 20px auto;
+            background: #fff;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .student-info label {
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .group-nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .nav-btn {
+            padding: 10px 18px;
+            border: none;
+            background-color: #fff;
+            color: var(--primary-color);
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn.active, .nav-btn:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .exercise-card {
+            display: none;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .exercise-card.active {
+            display: block;
+        }
+
+        .exercise-title {
+            color: var(--secondary-color);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .task-list {
+            margin-top: 20px;
+        }
+
+        .task-item {
+            margin-bottom: 15px;
+            padding: 12px;
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--secondary-color);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .task-item label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-check {
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-reset {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .feedback.correct {
+            background-color: #d4edda;
+            color: #155724;
+            display: block;
+        }
+
+        .feedback.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+
+        .correct-border { border-color: var(--success-color) !important; background-color: #e8f8f0; }
+        .incorrect-border { border-color: var(--accent-color) !important; background-color: #fde8e8; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Interactive English Practice</h1>
+        <p class="subtitle">Unit 1: Introductions, Weather & Family</p>
+    </header>
+
+    <div class="student-info">
+        <label for="studentName">Your Name:</label>
+        <input type="text" id="studentName" placeholder="Enter your full name before starting...">
+    </div>
+
+    <div class="group-nav">
+        <button class="nav-btn active" onclick="showExercise(1)">Group 1: Personal Details</button>
+        <button class="nav-btn" onclick="showExercise(2)">Group 2: Grammar & Questions</button>
+        <button class="nav-btn" onclick="showExercise(3)">Group 3: Conversation Match</button>
+        <button class="nav-btn" onclick="showExercise(4)">Group 4: Weather Context</button>
+        <button class="nav-btn" onclick="showExercise(5)">Group 5: City Weather Search</button>
+        <button class="nav-btn" onclick="showExercise(6)">Group 6: Family Logic</button>
+    </div>
+
+    <div id="ex1" class="exercise-card active">
+        <h2 class="exercise-title">Exercise 1: True or False (Alex's Email)</h2>
+        <p>Read Alex's email in the textbook image carefully. Decide if each statement is True or False.</p>
+        <div class="task-list">
+            <div class="task-item">
+                <label>1. Alex lives in Peru with his family.</label>
+                <select id="e1_1" data-ans="False">
+                    <option value="">-- Select --</option>
+                    <option value="True">True</option>
+                    <option value="False">False</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>2. Alex has two younger brothers.</label>
+                <select id="e1_2" data-ans="True">
+                    <option value="">-- Select --</option>
+                    <option value="True">True</option>
+                    <option value="False">False</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>3. Mr Goodall lived in Peru for 3 years.</label>
+                <select id="e1_3" data-ans="True">
+                    <option value="">-- Select --</option>
+                    <option value="True">True</option>
+                    <option value="False">False</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>4. Alex plays basketball on Sunday mornings.</label>
+                <select id="e1_4" data-ans="True">
+                    <option value="">-- Select --</option>
+                    <option value="True">True</option>
+                    <option value="False">False</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>5. Alex dislikes playing guitar in his band.</label>
+                <select id="e1_5" data-ans="False">
+                    <option value="">-- Select --</option>
+                    <option value="True">True</option>
+                    <option value="False">False</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>6. Alex goes to Ashton High School.</label>
+                <select id="e1_6" data-ans="True">
+                    <option value="">-- Select --</option>
+                    <option value="True">True</option>
+                    <option value="False">False</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>7. Alex usually likes getting up early on weekends.</label>
+                <select id="e1_7" data-ans="False">
+                    <option value="">-- Select --</option>
+                    <option value="True">True</option>
+                    <option value="False">False</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>8. Alex is looking for an e-pen pal in Peru.</label>
+                <select id="e1_8" data-ans="True">
+                    <option value="">-- Select --</option>
+                    <option value="True">True</option>
+                    <option value="False">False</option>
+                </select>
+            </div>
+        </div>
+        <div class="actions">
+            <button class="btn-check" onclick="checkAnswers(1)">Check Answers</button>
+            <button class="btn-reset" onclick="resetExercise(1)">Reset</button>
+        </div>
+        <div id="fb1" class="feedback"></div>
+    </div>
+
+    <div id="ex2" class="exercise-card">
+        <h2 class="exercise-title">Exercise 2: Complete Question Structures</h2>
+        <p>Choose the correct question word or auxiliary verb to complete each question.</p>
+        <div class="task-list">
+            <div class="task-item">
+                <label>1. __________ is your teacher's name?</label>
+                <select id="e2_1" data-ans="What">
+                    <option value="">-- Select --</option>
+                    <option value="What">What</option>
+                    <option value="Where">Where</option>
+                    <option value="Who">Who</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>2. __________ you live in Rome?</label>
+                <select id="e2_2" data-ans="Do">
+                    <option value="">-- Select --</option>
+                    <option value="Are">Are</option>
+                    <option value="Do">Do</option>
+                    <option value="Have">Have</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>3. __________ school do you go to?</label>
+                <select id="e2_3" data-ans="What">
+                    <option value="">-- Select --</option>
+                    <option value="Where">Where</option>
+                    <option value="What">What</option>
+                    <option value="When">When</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>4. __________ is your birthday?</label>
+                <select id="e2_4" data-ans="When">
+                    <option value="">-- Select --</option>
+                    <option value="When">When</option>
+                    <option value="Where">Where</option>
+                    <option value="How">How</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>5. __________ you like to go out with me?</label>
+                <select id="e2_5" data-ans="Would">
+                    <option value="">-- Select --</option>
+                    <option value="Do">Do</option>
+                    <option value="Are">Are</option>
+                    <option value="Would">Would</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>6. __________ you 14 years old?</label>
+                <select id="e2_6" data-ans="Are">
+                    <option value="">-- Select --</option>
+                    <option value="Do">Do</option>
+                    <option value="Are">Are</option>
+                    <option value="Have">Have</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>7. __________ are you from?</label>
+                <select id="e2_7" data-ans="Where">
+                    <option value="">-- Select --</option>
+                    <option value="Where">Where</option>
+                    <option value="What">What</option>
+                    <option value="When">When</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>8. __________ you got any cousins?</label>
+                <select id="e2_8" data-ans="Have">
+                    <option value="">-- Select --</option>
+                    <option value="Do">Do</option>
+                    <option value="Have">Have</option>
+                    <option value="Are">Are</option>
+                </select>
+            </div>
+        </div>
+        <div class="actions">
+            <button class="btn-check" onclick="checkAnswers(2)">Check Answers</button>
+            <button class="btn-reset" onclick="resetExercise(2)">Reset</button>
+        </div>
+        <div id="fb2" class="feedback"></div>
+    </div>
+
+    <div id="ex3" class="exercise-card">
+        <h2 class="exercise-title">Exercise 3: Complete Dialogue Pairs</h2>
+        <p>Select the most natural response for each statement.</p>
+        <div class="task-list">
+            <div class="task-item">
+                <label>1. A: Do you want to come over and play the new Minecraft game? <br> B: ____________</label>
+                <select id="e3_1" data-ans="Sure! I'd love to play.">
+                    <option value="">-- Choose --</option>
+                    <option value="I'm 15 years old.">I'm 15 years old.</option>
+                    <option value="Sure! I'd love to play.">Sure! I'd love to play.</option>
+                    <option value="No, it is raining.">No, it is raining.</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>2. A: What's the weather like in London? <br> B: ____________</label>
+                <select id="e3_2" data-ans="It's wet and cloudy today.">
+                    <option value="">-- Choose --</option>
+                    <option value="It's wet and cloudy today.">It's wet and cloudy today.</option>
+                    <option value="I go to Chester High.">I go to Chester High.</option>
+                    <option value="Yes, I have ten cousins.">Yes, I have ten cousins.</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>3. A: What do you like doing in your free time? <br> B: ____________</label>
+                <select id="e3_3" data-ans="I like playing computer games and guitar.">
+                    <option value="">-- Choose --</option>
+                    <option value="I am from Peru.">I am from Peru.</option>
+                    <option value="I like playing computer games and guitar.">I like playing computer games and guitar.</option>
+                    <option value="My teacher is Mr Goodall.">My teacher is Mr Goodall.</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>4. A: Have you got any brothers? <br> B: ____________</label>
+                <select id="e3_4" data-ans="Yes, I have two younger brothers.">
+                    <option value="">-- Choose --</option>
+                    <option value="Yes, I have two younger brothers.">Yes, I have two younger brothers.</option>
+                    <option value="No, it is very sunny.">No, it is very sunny.</option>
+                    <option value="I am a student.">I am a student.</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>5. A: Where is Seville located? <br> B: ____________</label>
+                <select id="e3_5" data-ans="It's in Spain.">
+                    <option value="">-- Choose --</option>
+                    <option value="It's freezing.">It's freezing.</option>
+                    <option value="It's in Spain.">It's in Spain.</option>
+                    <option value="I live in Birmingham.">I live in Birmingham.</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>6. A: What do you do on Sunday mornings? <br> B: ____________</label>
+                <select id="e3_6" data-ans="I usually play basketball matches.">
+                    <option value="">-- Choose --</option>
+                    <option value="I usually play basketball matches.">I usually play basketball matches.</option>
+                    <option value="I'm watching TV right now.">I'm watching TV right now.</option>
+                    <option value="No, I'm 13 years old.">No, I'm 13 years old.</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>7. A: Is it hot in New York right now? <br> B: ____________</label>
+                <select id="e3_7" data-ans="No, it's freezing!">
+                    <option value="">-- Choose --</option>
+                    <option value="Yes, I am a student.">Yes, I am a student.</option>
+                    <option value="No, it's freezing!">No, it's freezing!</option>
+                    <option value="I live in Rome.">I live in Rome.</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>8. A: How are Hemi and Claire related to Alex? <br> B: ____________</label>
+                <select id="e3_8" data-ans="They are his relatives on Skype.">
+                    <option value="">-- Choose --</option>
+                    <option value="They live in Cape Town.">They live in Cape Town.</option>
+                    <option value="They are his relatives on Skype.">They are his relatives on Skype.</option>
+                    <option value="They like rainy weather.">They like rainy weather.</option>
+                </select>
+            </div>
+        </div>
+        <div class="actions">
+            <button class="btn-check" onclick="checkAnswers(3)">Check Answers</button>
+            <button class="btn-reset" onclick="resetExercise(3)">Reset</button>
+        </div>
+        <div id="fb3" class="feedback"></div>
+    </div>
+
+    <div id="ex4" class="exercise-card">
+        <h2 class="exercise-title">Exercise 4: Weather & Situation Matching</h2>
+        <p>Match the situation to the correct weather word.</p>
+        <div class="task-list">
+            <div class="task-item">
+                <label>1. You need sunglasses and suncream.</label>
+                <select id="e4_1" data-ans="sunny">
+                    <option value="">-- Choose --</option>
+                    <option value="sunny">sunny</option>
+                    <option value="foggy">foggy</option>
+                    <option value="freezing">freezing</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>2. Water drops are falling from the sky.</label>
+                <select id="e4_2" data-ans="rainy">
+                    <option value="">-- Choose --</option>
+                    <option value="dry">dry</option>
+                    <option value="rainy">rainy</option>
+                    <option value="hot">hot</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>3. It is 0 degrees outside and ice is on the ground.</label>
+                <select id="e4_3" data-ans="freezing">
+                    <option value="">-- Choose --</option>
+                    <option value="warm">warm</option>
+                    <option value="freezing">freezing</option>
+                    <option value="humid">humid</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>4. The wind is blowing trees heavily.</label>
+                <select id="e4_4" data-ans="windy">
+                    <option value="">-- Choose --</option>
+                    <option value="windy">windy</option>
+                    <option value="cloudy">cloudy</option>
+                    <option value="dry">dry</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>5. You can't see cars in front of you on the road.</label>
+                <select id="e4_5" data-ans="foggy">
+                    <option value="">-- Choose --</option>
+                    <option value="hot">hot</option>
+                    <option value="foggy">foggy</option>
+                    <option value="sunny">sunny</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>6. There are no clouds and no rain for weeks.</label>
+                <select id="e4_6" data-ans="dry">
+                    <option value="">-- Choose --</option>
+                    <option value="wet">wet</option>
+                    <option value="dry">dry</option>
+                    <option value="cloudy">cloudy</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>7. You wear a light t-shirt because it is pleasant and not too hot.</label>
+                <select id="e4_7" data-ans="warm">
+                    <option value="">-- Choose --</option>
+                    <option value="warm">warm</option>
+                    <option value="freezing">freezing</option>
+                    <option value="cold">cold</option>
+                </select>
+            </div>
+            <div class="task-item">
+                <label>8. The grey sky is completely covered without any sun visible.</label>
+                <select id="e4_8" data-ans="cloudy">
+                    <option value="">-- Choose --</option>
+                    <option value="sunny">sunny</option>
+                    <option value="cloudy">cloudy</option>
+                    <option value="windy">windy</option>
+                </select>
+            </div>
+        </div>
+        <div class="actions">
+            <button class="btn-check" onclick="checkAnswers(4)">Check Answers</button>
+            <button class="btn-reset" onclick="resetExercise(4)">Reset</button>
+        </div>
+        <div id="fb4" class="feedback"></div>
+    </div>
+
+    <div id="ex5" class="exercise-card">
+        <h2 class="exercise-title">Exercise 5: Geography & Cities Weather</h2>
+        <p>Type the correct city or weather adjective from the photos in your textbook.</p>
+        <div class="task-list">
+            <div class="task-item">
+                <label for="e5_1">1. Capital city of the UK shown with a river and bridge:</label>
+                <input type="text" id="e5_1" data-ans="London">
+            </div>
+            <div class="task-item">
+                <label for="e5_2">2. City in South Africa shown with mountains and sea:</label>
+                <input type="text" id="e5_2" data-ans="Cape Town">
+            </div>
+            <div class="task-item">
+                <label for="e5_3">3. City in France with the famous Eiffel Tower:</label>
+                <input type="text" id="e5_3" data-ans="Paris">
+            </div>
+            <div class="task-item">
+                <label for="e5_4">4. US city with snow on streets in the textbook photo:</label>
+                <input type="text" id="e5_4" data-ans="New York">
+            </div>
+            <div class="task-item">
+                <label for="e5_5">5. Spanish city with historic buildings and canal boat water:</label>
+                <input type="text" id="e5_5" data-ans="Seville">
+            </div>
+            <div class="task-item">
+                <label for="e5_6">6. Weather in New York photo appears to be __________.</label>
+                <input type="text" id="e5_6" data-ans="freezing">
+            </div>
+            <div class="task-item">
+                <label for="e5_7">7. Weather in Seville photo appears warm and __________.</label>
+                <input type="text" id="e5_7" data-ans="sunny">
+            </div>
+            <div class="task-item">
+                <label for="e5_8">8. City marked in the middle of the UK map exercise:</label>
+                <input type="text" id="e5_8" data-ans="Birmingham">
+            </div>
+        </div>
+        <div class="actions">
+            <button class="btn-check" onclick="checkAnswers(5)">Check Answers</button>
+            <button class="btn-reset" onclick="resetExercise(5)">Reset</button>
+        </div>
+        <div id="fb5" class="feedback"></div>
+    </div>
+
+    <div id="ex6" class="exercise-card">
+        <h2 class="exercise-title">Exercise 6: Family Vocabulary & Opposite Pairs</h2>
+        <p>Complete each sentence with the correct family member word.</p>
+        <div class="task-list">
+            <div class="task-item">
+                <label for="e6_1">1. Your mother's sister is your __________.</label>
+                <input type="text" id="e6_1" data-ans="aunt">
+            </div>
+            <div class="task-item">
+                <label for="e6_2">2. Your father's brother is your __________.</label>
+                <input type="text" id="e6_2" data-ans="uncle">
+            </div>
+            <div class="task-item">
+                <label for="e6_3">3. Your brother's daughter is your __________.</label>
+                <input type="text" id="e6_3" data-ans="niece">
+            </div>
+            <div class="task-item">
+                <label for="e6_4">4. Your sister's son is your __________.</label>
+                <input type="text" id="e6_4" data-ans="nephew">
+            </div>
+            <div class="task-item">
+                <label for="e6_5">5. The female partner in a marriage is the __________.</label>
+                <input type="text" id="e6_5" data-ans="wife">
+            </div>
+            <div class="task-item">
+                <label for="e6_6">6. The male partner in a marriage is the __________.</label>
+                <input type="text" id="e6_6" data-ans="husband">
+            </div>
+            <div class="task-item">
+                <label for="e6_7">7. Your mother and father are your __________.</label>
+                <input type="text" id="e6_7" data-ans="parents">
+            </div>
+            <div class="task-item">
+                <label for="e6_8">8. Your aunt's children are your __________.</label>
+                <input type="text" id="e6_8" data-ans="cousins">
+            </div>
+        </div>
+        <div class="actions">
+            <button class="btn-check" onclick="checkAnswers(6)">Check Answers</button>
+            <button class="btn-reset" onclick="resetExercise(6)">Reset</button>
+        </div>
+        <div id="fb6" class="feedback"></div>
+    </div>
+
+    <script>
+        // Optional: Enter your Google Apps Script Web App URL here to store results online automatically
+        const GOOGLE_SCRIPT_URL = ""; 
+
+        function showExercise(num) {
+            const cards = document.querySelectorAll('.exercise-card');
+            const btns = document.querySelectorAll('.nav-btn');
+
+            cards.forEach(card => card.classList.remove('active'));
+            btns.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(`ex${num}`).classList.add('active');
+            btns[num - 1].classList.add('active');
+        }
+
+        function checkAnswers(exNum) {
+            const studentName = document.getElementById('studentName').value.trim();
+            if (!studentName) {
+                alert("Please type your name at the top before checking answers!");
+                document.getElementById('studentName').focus();
+                return;
+            }
+
+            const card = document.getElementById(`ex${exNum}`);
+            const inputs = card.querySelectorAll('input[type="text"], select');
+            let correctCount = 0;
+            let total = inputs.length;
+
+            inputs.forEach(input => {
+                const expected = input.getAttribute('data-ans').trim().toLowerCase();
+                const actual = input.value.trim().toLowerCase();
+
+                if (actual === expected) {
+                    input.classList.add('correct-border');
+                    input.classList.remove('incorrect-border');
+                    correctCount++;
+                } else {
+                    input.classList.add('incorrect-border');
+                    input.classList.remove('correct-border');
+                }
+            });
+
+            const feedback = document.getElementById(`fb${exNum}`);
+            if (correctCount === total) {
+                feedback.className = 'feedback correct';
+                feedback.innerHTML = `Great job, ${studentName}! All ${total} answers are correct! 🎉`;
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.innerHTML = `${studentName}, you got ${correctCount} out of ${total} correct. Check highlighted answers and try again!`;
+            }
+
+            // Send score to Google Sheets if Web App URL is supplied
+            if (GOOGLE_SCRIPT_URL) {
+                fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: studentName,
+                        exercise: `Exercise ${exNum}`,
+                        score: `${correctCount}/${total}`,
+                        timestamp: new Date().toLocaleString()
+                    })
+                });
+            }
+        }
+
+        function resetExercise(exNum) {
+            const card = document.getElementById(`ex${exNum}`);
+            const inputs = card.querySelectorAll('input[type="text"], select');
+            
+            inputs.forEach(input => {
+                input.value = '';
+                input.classList.remove('correct-border', 'incorrect-border');
+            });
+
+            const feedback = document.getElementById(`fb${exNum}`);
+            feedback.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
